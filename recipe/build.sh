@@ -19,6 +19,16 @@ export CXXFLAGS="${CXXFLAGS//-O2/-O3}"
 # libraries are explicitly listed here due to --disable-libsearch
 export LIBS="-lfftw3 -lgsl -lgslcblas -llapack -lblas -lxdrfile -lz $LIBS"
 
+vmddir=$PREFIX/lib/python$PY_VER/site-packages/vmd/plugins
+if [[ $(uname) == "Darwin" ]]; then
+   vmdarch=MACOSXX86_64
+else
+   vmdarch=LINUXAMD64
+fi
+
+LIBS="$LIBS -L$vmddir/$vmdarch/molfile -lmolfile_plugin"
+CPPFLAGS="-I$vmddir/include -I$vmddir/$vmdarch/molfile"
+
 # python is disabled since it should be provided as a separate package
 # --disable-libsearch forces to link only explicitely requested libraries
 # --disable-static-patch avoid tests that are only required for static patches
