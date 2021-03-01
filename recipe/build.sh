@@ -1,5 +1,13 @@
 #!/bin/bash
 
+if [[ "$target_platform" == "win-64" ]] ; then
+  patch_libtool
+  ./configure --prefix=$PREFIX --disable-python
+  make -j${CPU_COUNT}
+  make install
+else
+
+
 if [[ $(uname) == "Linux" ]]; then
 # STATIC_LIBS is a PLUMED specific option and is required on Linux for the following reason:
 # When using env modules the dependent libraries can be found through the
@@ -26,8 +34,7 @@ export LIBS="-lfftw3 -lgsl -lgslcblas -llapack -lblas -lxdrfile -lz $LIBS"
 # --enable-asmjit enables bundled asmjit implementation
 ./configure --prefix=$PREFIX --disable-python --disable-libsearch --disable-static-patch --disable-static-archive --enable-asmjit
 
-[[ "$target_platform" == "win-64" ]] && patch_libtool
-
 make -j${CPU_COUNT}
 make install
 
+fi
