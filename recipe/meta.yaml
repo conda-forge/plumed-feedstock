@@ -11,7 +11,7 @@ source:
 
 build:
   number: 0
-  skip: true  # [win]
+  skip: true  # [win and vc<14]
 # Most programs should link libplumedWrapper.a so that libplumedKernel.so will be loaded
 # with dlopen. There is no need for pinning thus.
 # Programs linking libplumed.so should pin to min_pin='x.x', max_pin='x'.
@@ -21,8 +21,9 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - llvm-openmp  # [osx]
-    - make
+    - autotools_clang_conda  # [win]
+    - llvm-openmp  # [osx or win]
+    - make # [not win]
 # xxd is provided by package vim and used during build
     - vim  # [linux]
   host:
@@ -30,11 +31,11 @@ requirements:
     - gsl
     - libblas
     - liblapack
-    - llvm-openmp  # [osx]
+    - llvm-openmp  # [osx or win]
     - xdrfile
     - zlib
   run:
-    - gawk
+    - gawkA        # [not win]
     - llvm-openmp  # [osx]
 
 test:

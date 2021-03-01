@@ -26,6 +26,8 @@ export LIBS="-lfftw3 -lgsl -lgslcblas -llapack -lblas -lxdrfile -lz $LIBS"
 # --enable-asmjit enables bundled asmjit implementation
 ./configure --prefix=$PREFIX --disable-python --disable-libsearch --disable-static-patch --disable-static-archive --enable-asmjit
 
+[[ "$target_platform" == "win-64" ]] && patch_libtool
+
 make -j${CPU_COUNT}
 make install
 
