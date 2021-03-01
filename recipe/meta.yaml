@@ -24,7 +24,7 @@ requirements:
     - autotools_clang_conda  # [win]
     - llvm-openmp  # [osx]
     - llvm-openmp  # [win]
-    - make # [not win]
+    - make  # [not win]
 # xxd is provided by package vim and used during build
     - vim  # [linux]
   host:
@@ -34,11 +34,12 @@ requirements:
     - liblapack
     - llvm-openmp  # [osx]
     - llvm-openmp  # [win]
-    - xdrfile
+    - xdrfile # [not win]
     - zlib
   run:
-    - gawk         # [not win]
+    - gawk  # [not win]
     - llvm-openmp  # [osx]
+    - llvm-openmp  # [win]
 
 test:
   commands:
