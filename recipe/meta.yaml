@@ -5,13 +5,14 @@ package:
   name: {{ name|lower }}
   version: {{ version }}
 
+# temporary:
 source:
-  url: https://github.com/plumed/plumed2/archive/v{{ version }}.tar.gz
-  sha256: 14450ea566c25ac9bf71fd77bb9c0c95e9038462b5739c73a515be82e2011cd6
+  git_url: https://github.com/plumed/plumed2.git
+  git_rev: v2.7.0-cf-windows
 
 build:
   number: 0
-  skip: true  # [win]
+  skip: true  # [win and vc<14]
 # Most programs should link libplumedWrapper.a so that libplumedKernel.so will be loaded
 # with dlopen. There is no need for pinning thus.
 # Programs linking libplumed.so should pin to min_pin='x.x', max_pin='x'.
@@ -21,8 +22,10 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
+    - autotools_clang_conda  # [win]
     - llvm-openmp  # [osx]
-    - make
+    - llvm-openmp  # [win]
+    - make  # [not win]
 # xxd is provided by package vim and used during build
     - vim  # [linux]
   host:
@@ -31,11 +34,13 @@ requirements:
     - libblas
     - liblapack
     - llvm-openmp  # [osx]
-    - xdrfile
+    - llvm-openmp  # [win]
+    - xdrfile # [not win]
     - zlib
   run:
-    - gawk
+    - gawk  # [not win]
     - llvm-openmp  # [osx]
+    - llvm-openmp  # [win]
 
 test:
   commands:

@@ -1,5 +1,13 @@
 #!/bin/bash
 
+if [[ "$target_platform" == "win-64" ]] ; then
+  ./configure --prefix=$PREFIX --disable-python
+  patch_libtool
+  make -j${CPU_COUNT}
+  make install
+else
+
+
 if [[ $(uname) == "Linux" ]]; then
 # STATIC_LIBS is a PLUMED specific option and is required on Linux for the following reason:
 # When using env modules the dependent libraries can be found through the
@@ -35,3 +43,4 @@ fi
 make -j${CPU_COUNT}
 make install
 
+fi
