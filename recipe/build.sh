@@ -1,8 +1,8 @@
 #!/bin/bash
 
 if [[ "$target_platform" == "win-64" ]] ; then
-  patch_libtool
   ./configure --prefix=$PREFIX --disable-python
+  patch_libtool
   make -j${CPU_COUNT}
   make install
 else
