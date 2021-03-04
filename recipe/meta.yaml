@@ -5,9 +5,10 @@ package:
   name: {{ name|lower }}
   version: {{ version }}
 
+# temporary:
 source:
-  url: https://github.com/plumed/plumed2/archive/v{{ version }}.tar.gz
-  sha256: 14450ea566c25ac9bf71fd77bb9c0c95e9038462b5739c73a515be82e2011cd6
+  git_url: https://github.com/plumed/plumed2.git
+  git_rev: v2.7.0-cf-windows
 
 build:
   number: 0
