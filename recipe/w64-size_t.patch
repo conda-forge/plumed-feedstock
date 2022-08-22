@@ -1,0 +1,13 @@
+diff --git a/src/tools/Communicator.cpp b/src/tools/Communicator.cpp
+index 22ea2ea21..6d60cbc9d 100644
+--- a/src/tools/Communicator.cpp
++++ b/src/tools/Communicator.cpp
+@@ -279,6 +279,7 @@ template<> MPI_Datatype Communicator::getMPIType<unsigned>() { return MPI_Dataty
+ template<> MPI_Datatype Communicator::getMPIType<AtomNumber>()   { return MPI_Datatype();}
+ template<> MPI_Datatype Communicator::getMPIType<long unsigned>() { return MPI_Datatype();}
+ template<> MPI_Datatype Communicator::getMPIType<long double>() { return MPI_Datatype();}
++template<> MPI_Datatype Communicator::getMPIType<long long unsigned>() { return MPI_Datatype();}  // w64 size_t
+ #endif
+ 
+ void Communicator::Split(int color,int key,Communicator&pc)const {
+ 
