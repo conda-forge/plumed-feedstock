@@ -1,3 +1,3 @@
-bash configure --prefix=%PREFIX%
+bash configure --prefix=%PREFIX% --disable-openmp
 make
 make install
