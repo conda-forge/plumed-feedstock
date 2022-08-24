@@ -56,6 +56,8 @@ requirements:
     - {{ mpi }}  # [mpi != "nompi" and not win]
     - gawk  # [not win]
     - m2-gawk  # [win]
+    - m2-msys2-runtime  # [win]
+    - zlib  # [win]
     - llvm-openmp  # [osx]
 
 test:
