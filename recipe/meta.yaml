@@ -18,7 +18,7 @@ source:
 {% endif %}
 build:
   number: {{ build }}
-#  skip: true  # [win]
+  skip: true  # [not win]
 # Most programs should link libplumedWrapper.a so that libplumedKernel.so will be loaded
 # with dlopen. There is no need for pinning thus.
 # Programs linking libplumed.so should pin to min_pin='x.x', max_pin='x'.
@@ -56,8 +56,9 @@ requirements:
     - {{ mpi }}  # [mpi != "nompi" and not win]
     - gawk  # [not win]
     - m2-gawk  # [win]
+    - m2-zlib  # [win]
     - m2-msys2-runtime  # [win]
-    - zlib  # [win]
+    - m2w64-gcc-libs-core  # [win]
     - llvm-openmp  # [osx]
 
 test:
