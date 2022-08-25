@@ -1,5 +1,7 @@
 {% set name = "plumed" %}
-{% set version = "2.7.0" %}
+{% set version = "2.8.0" %}
+{% set build = 0 %}
+{% set mpi = mpi or "nompi" %}
 
 package:
   name: {{ name|lower }}
@@ -7,16 +9,31 @@ package:
 
 # temporary:
 source:
-  git_url: https://github.com/plumed/plumed2.git
-  git_rev: v2.7.0-cf-windows
+  url: https://github.com/plumed/plumed2/archive/v{{ version }}.tar.gz
+  sha256: 8357eca6f280125037ad4e7c427f96f2af2f60ddfedce1a2e36e1e1cc3bff32b
 
+{% if mpi == 'nompi' %}
+{% set build = build + 100 %}
+{% endif %}
 build:
-  number: 0
-  skip: true  # [win and vc<14]
+  number: {{ build }}
+  skip: true  # [win]
 # Most programs should link libplumedWrapper.a so that libplumedKernel.so will be loaded
 # with dlopen. There is no need for pinning thus.
 # Programs linking libplumed.so should pin to min_pin='x.x', max_pin='x'.
 # Programs linking libplumedKernel.so should pin to min_pin='x.x.x'. max_pin='x.x.x'.
+
+  {% if mpi != "nompi" %}
+  {% set mpi_prefix = "mpi_" + mpi %}
+  {% else %}
+  {% set mpi_prefix = "nompi" %}
+  {% endif %}
+  string: {{ mpi_prefix }}_h{{ PKG_HASH }}_{{ build }}
+
+  {% if mpi != "nompi" %}
+  run_exports:
+    - {{ name }} * {{ mpi_prefix }}_*
+  {% endif %}
 
 requirements:
   build:
@@ -24,30 +41,32 @@ requirements:
     - {{ compiler('cxx') }}
     - autotools_clang_conda  # [win]
     - llvm-openmp  # [osx]
-    - llvm-openmp  # [win]
-    - make  # [not win]
-# xxd is provided by package vim and used during build
-    - vim  # [linux]
+    - make
   host:
+    - {{ mpi }}  # [mpi != "nompi"]
     - fftw
     - gsl
     - libblas
     - liblapack
     - llvm-openmp  # [osx]
-    - llvm-openmp  # [win]
-    - xdrfile # [not win]
     - zlib
   run:
-    - gawk  # [not win]
+    - {{ mpi }}  # [mpi != "nompi"]
+    - gawk
     - llvm-openmp  # [osx]
     - llvm-openmp  # [win]
 
 test:
   commands:
+    - export OMPI_MCA_plm=isolated  # [mpi == "openmpi" and linux]
+    - export OMPI_MCA_btl_vader_single_copy_mechanism=none  # [mpi == "openmpi" and linux]
+    - export OMPI_MCA_rmaps_base_oversubscribe=yes  # [mpi == "openmpi" and linux]
     - plumed info --root
     - plumed info --long-version
     - plumed-patch -h
-    - plumed config has asmjit external_blas external_lapack fftw gsl xdrfile zlib
+    - plumed config has external_blas external_lapack fftw gsl zlib
+    - plumed config has asmjit  # [not ppc64le and not aarch64 and not arm64]
+    - plumed config has mpi  # [mpi != "nompi"]
     - $PREFIX/lib/plumed/plumed-runtime -h
     - test -f $PREFIX/lib/libplumed$SHLIB_EXT
     - test -f $PREFIX/lib/libplumedWrapper.a
@@ -55,7 +74,7 @@ test:
 
 about:
   home: http://www.plumed.org/
-  license: LGPL-3.0
+  license: LGPL-3.0-only
   license_family: GPL
   license_file: COPYING.LESSER
   summary: Free energy calculations in molecular systems
