@@ -1,7 +1,7 @@
 {% set name = "plumed" %}
 {% set version = "2.8.0" %}
 {% set build = 0 %}
-{% set mpi = mpi or "nompi" %}
+{% set mpi = mpi or "nompi" %}   
 
 package:
   name: {{ name|lower }}
@@ -10,13 +10,15 @@ package:
 source:
   url: https://github.com/plumed/plumed2/archive/v{{ version }}.tar.gz
   sha256: 8357eca6f280125037ad4e7c427f96f2af2f60ddfedce1a2e36e1e1cc3bff32b
+  patches:
+    - w64-size_t.patch
 
 {% if mpi == 'nompi' %}
 {% set build = build + 100 %}
 {% endif %}
 build:
   number: {{ build }}
-  skip: true  # [win]
+  skip: false
 # Most programs should link libplumedWrapper.a so that libplumedKernel.so will be loaded
 # with dlopen. There is no need for pinning thus.
 # Programs linking libplumed.so should pin to min_pin='x.x', max_pin='x'.
@@ -36,21 +38,27 @@ build:
 
 requirements:
   build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
+    - {{ compiler('c') }}     # [not win]
+    - {{ compiler('cxx') }}  # [not win]
     - llvm-openmp  # [osx]
-    - make
+    - make  # [not win]
+    - m2w64-gcc  # [win]
+    - autotools_clang_conda  # [win]
   host:
-    - {{ mpi }}  # [mpi != "nompi"]
-    - fftw
-    - gsl
-    - libblas
-    - liblapack
+    - {{ mpi }}  # [mpi != "nompi" and not win]
+    - fftw   
+    - gsl  
+    - libblas  # [not win]
+    - liblapack  # [not win]
     - llvm-openmp  # [osx]
     - zlib
   run:
-    - {{ mpi }}  # [mpi != "nompi"]
-    - gawk
+    - {{ mpi }}  # [mpi != "nompi" and not win]
+    - gawk  # [not win]
+    - m2-gawk  # [win]
+    - m2-msys2-runtime  # [win]
+    - m2w64-gcc-libs  # [win]
+    - m2w64-zlib  # [win]
     - llvm-openmp  # [osx]
 
 test:
@@ -60,14 +68,14 @@ test:
     - export OMPI_MCA_rmaps_base_oversubscribe=yes  # [mpi == "openmpi" and linux]
     - plumed info --root
     - plumed info --long-version
-    - plumed-patch -h
-    - plumed config has external_blas external_lapack fftw gsl zlib
-    - plumed config has asmjit  # [not ppc64le and not aarch64 and not arm64]
+    - plumed-patch -h  # [not win]
+    - plumed config has external_blas external_lapack fftw gsl zlib  # [not win]
+    - plumed config has asmjit  # [not ppc64le and not aarch64 and not arm64 and not win]
     - plumed config has mpi  # [mpi != "nompi"]
-    - $PREFIX/lib/plumed/plumed-runtime -h
-    - test -f $PREFIX/lib/libplumed$SHLIB_EXT
-    - test -f $PREFIX/lib/libplumedWrapper.a
-    - test -f $PREFIX/lib/libplumedKernel$SHLIB_EXT
+    - $PREFIX/lib/plumed/plumed-runtime -h  # [not win]
+    - test -f $PREFIX/lib/libplumed$SHLIB_EXT  # [not win]
+    - test -f $PREFIX/lib/libplumedWrapper.a   # [not win]
+    - test -f $PREFIX/lib/libplumedKernel$SHLIB_EXT  # [not win]
 
 about:
   home: http://www.plumed.org/

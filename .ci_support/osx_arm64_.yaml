@@ -3,7 +3,7 @@ MACOSX_DEPLOYMENT_TARGET:
 c_compiler:
 - clang
 c_compiler_version:
-- '12'
+- '14'
 channel_sources:
 - conda-forge
 channel_targets:
@@ -11,7 +11,7 @@ channel_targets:
 cxx_compiler:
 - clangxx
 cxx_compiler_version:
-- '12'
+- '14'
 fftw:
 - '3'
 gsl:
@@ -21,11 +21,15 @@ libblas:
 liblapack:
 - 3.9 *netlib
 llvm_openmp:
-- '12'
+- '14'
 macos_machine:
 - arm64-apple-darwin20.0.0
 mpi:
 - nompi
+mpich:
+- '4'
+openmpi:
+- '4'
 pin_run_as_build:
   fftw:
     max_pin: x
