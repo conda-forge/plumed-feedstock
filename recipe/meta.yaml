@@ -56,9 +56,9 @@ requirements:
     - {{ mpi }}  # [mpi != "nompi" and not win]
     - gawk  # [not win]
     - m2-gawk  # [win]
-    - m2-zlib  # [win]
     - m2-msys2-runtime  # [win]
-    - m2w64-gcc-libs-core  # [win]
+    - m2w64-gcc-libs  # [win]
+    - m2w64-zlib  # [win]
     - llvm-openmp  # [osx]
 
 test:
@@ -68,14 +68,14 @@ test:
     - export OMPI_MCA_rmaps_base_oversubscribe=yes  # [mpi == "openmpi" and linux]
     - plumed info --root
     - plumed info --long-version
-    - plumed-patch -h
-    - plumed config has external_blas external_lapack fftw gsl zlib
-    - plumed config has asmjit  # [not ppc64le and not aarch64 and not arm64]
+    - plumed-patch -h  # [not win]
+    - plumed config has external_blas external_lapack fftw gsl zlib  # [not win]
+    - plumed config has asmjit  # [not ppc64le and not aarch64 and not arm64 and not win]
     - plumed config has mpi  # [mpi != "nompi"]
-    - $PREFIX/lib/plumed/plumed-runtime -h
-    - test -f $PREFIX/lib/libplumed$SHLIB_EXT
-    - test -f $PREFIX/lib/libplumedWrapper.a
-    - test -f $PREFIX/lib/libplumedKernel$SHLIB_EXT
+    - $PREFIX/lib/plumed/plumed-runtime -h  # [not win]
+    - test -f $PREFIX/lib/libplumed$SHLIB_EXT  # [not win]
+    - test -f $PREFIX/lib/libplumedWrapper.a   # [not win]
+    - test -f $PREFIX/lib/libplumedKernel$SHLIB_EXT  # [not win]
 
 about:
   home: http://www.plumed.org/
