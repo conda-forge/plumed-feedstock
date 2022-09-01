@@ -53,7 +53,8 @@ requirements:
     - zlib
   run:
     - {{ mpi }}  # [mpi != "nompi"]
-    - gawk
+    - gawk  # [not win]
+    - m2-gawk  # [win]
     - llvm-openmp  # [osx]
     - llvm-openmp  # [win]
 
