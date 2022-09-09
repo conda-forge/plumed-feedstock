@@ -51,6 +51,7 @@ requirements:
     - liblapack
     - llvm-openmp  # [osx]
     - zlib
+    - dirent  # [win]
   run:
     - {{ mpi }}  # [mpi != "nompi"]
     - gawk  # [not win]
