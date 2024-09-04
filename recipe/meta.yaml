@@ -1,5 +1,5 @@
 {% set name = "plumed" %}
-{% set version = "2.9.1" %}
+{% set version = "2.9.2" %}
 {% set build = 0 %}
 {% set mpi = mpi or "nompi" %}
 
@@ -9,7 +9,7 @@ package:
 
 source:
   url: https://github.com/plumed/plumed2/archive/v{{ version }}.tar.gz
-  sha256: e24563ad1eb657611918e0c978d9c5212340f128b4f1aa5efbd439a0b2e91b58
+  sha256: 301fbc958374f81d9b8c7a1eac73095f6dded52cce73ce33d64bdbebf51ac63d
 
 {% if mpi == 'nompi' %}
 {% set build = build + 100 %}
