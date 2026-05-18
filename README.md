@@ -256,4 +256,5 @@ Feedstock Maintainers
 =====================
 
 * [@GiovanniBussi](https://github.com/GiovanniBussi/)
+* [@mkrack](https://github.com/mkrack/)
 

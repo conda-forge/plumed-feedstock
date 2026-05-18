@@ -33,4 +33,3 @@ export LIBS="-lfftw3 -lgsl -lgslcblas -llapack -lblas -lz $LIBS"
 
 make -j${CPU_COUNT}
 make install
-
