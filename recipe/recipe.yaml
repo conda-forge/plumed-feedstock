@@ -1,0 +1,90 @@
+schema_version: 1
+
+context:
+  name: "plumed"
+  version: "2.10.1"
+  mpi_prefix: ${{ "nompi" if mpi == "nompi" else "mpi_" + mpi }}
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  url: https://github.com/${{ name }}/${{ name }}2/archive/v${{ version }}.tar.gz
+  sha256: 92e504371869091fe1ef1dd5a1f2996aa369ed9db6c7d2a56650231786ac7c5d
+
+build:
+  # Prioritize nompi via build number
+  number: ${{ 1 + (100 if mpi == "nompi" else 0) }}
+  skip:
+    - osx and arm64 and mpi == "openmpi"
+    - win
+  string: mpi_${{ mpi }}_h${{ hash }}_${{ build_number }}
+
+requirements:
+  build:
+    - ${{ compiler("c") }}
+    - ${{ compiler("cxx") }}
+    - make
+  host:
+    - if: mpi != "nompi"
+      then: ${{ mpi }}
+    - fftw
+    - gsl
+    - libblas
+    - libfabric
+    - liblapack
+    - "libopenblas * *openmp*"
+    - zlib
+  run:
+    - if: mpi != "nompi"
+      then: ${{ mpi }}
+    - gawk
+    - "libopenblas * *openmp*"
+
+
+tests:
+  - package_contents:
+      lib:
+        - ${{ name }}
+        - ${{ name }}Kernel
+        - lib${{ name }}Wrapper.a
+  - script:
+      - if: target_platform == build_platform
+        then:
+          - if: mpi == "openmpi"
+            then:
+              - export OMPI_MCA_plm=isolated
+              - export OMPI_MCA_btl_vader_single_copy_mechanism=none
+              - export OMPI_MCA_rmaps_base_oversubscribe=yes
+              - export OMPI_MCA_btl=vader,self
+          - plumed info --root
+          - plumed info --long-version
+          - plumed-patch -h
+          - plumed config has external_blas external_lapack fftw gsl zlib
+          - if: mpi != "nompi"
+            then:
+              - plumed config has mpi
+          - if: not (target_platform == "linux-ppc64le"
+                     or target_platform == "linux-aarch64"
+                     or target_platform == "osx-arm64")
+            then:
+              - plumed config has asmjit
+          - $PREFIX/lib/plumed/plumed-runtime -h
+
+about:
+  homepage: http://www.plumed.org/
+  license: LGPL-3.0-only
+  license_file: COPYING.LESSER
+  summary: Free energy calculations in molecular systems
+  description: |
+    PLUMED is an open source library for free energy calculations in
+    molecular systems which works together with some of the most
+    popular molecular dynamics engines.
+  documentation: https://www.plumed.org/doc
+  repository: https://github.com/plumed/plumed2
+
+extra:
+  recipe-maintainers:
+    - GiovanniBussi
+    - mkrack

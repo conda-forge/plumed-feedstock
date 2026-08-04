@@ -1,9 +1,10 @@
 mpi:
   - nompi
-  - mpich    # [not osx or not arm64]
-  - openmpi  # [not osx or not arm64]
+  - mpich
+  - openmpi
 
-c_stdlib:
-  - sysroot       # [linux]
-c_stdlib_version:
-  - "2.28"        # [linux]
+mpich:
+  - 5
+
+openmpi:
+  - 5

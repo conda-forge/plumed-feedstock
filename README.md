@@ -17,7 +17,6 @@ PLUMED is an open source library for free energy calculations in
 molecular systems which works together with some of the most
 popular molecular dynamics engines.
 
-
 Current build status
 ====================
 
@@ -61,6 +60,20 @@ Current build status
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=6777&branchName=main">
                   <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/plumed-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_mpiopenmpi" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_arm64_mpimpich</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=6777&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/plumed-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_arm64_mpimpich" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_arm64_mpinompi</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=6777&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/plumed-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_arm64_mpinompi" alt="variant">
                 </a>
               </td>
             </tr>
