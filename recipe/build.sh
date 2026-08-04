@@ -2,17 +2,19 @@
 set -ex
 
 if [[ "${mpi}" != "nompi" ]]; then
-  export CXX="$PREFIX/bin/mpicxx"
-  export CC="$PREFIX/bin/mpicc"
+  if [[ "${target_platform}" != "osx-arm64" ]]; then
+    export CXX="$PREFIX/bin/mpicxx"
+    export CC="$PREFIX/bin/mpicc"
+  fi
 fi
 
 if [[ $(uname) == "Linux" ]]; then
-# STATIC_LIBS is a PLUMED specific option and is required on Linux for the following reason:
-# When using env modules the dependent libraries can be found through the
-# LD_LIBRARY_PATH or encoded configuring with -rpath.
-# Conda does not use LD_LIBRARY_PATH and it is thus necessary to suggest where libraries are.
+  # STATIC_LIBS is a PLUMED specific option and is required on Linux for the following reason:
+  # When using env modules the dependent libraries can be found through the
+  # LD_LIBRARY_PATH or encoded configuring with -rpath.
+  # Conda does not use LD_LIBRARY_PATH and it is thus necessary to suggest where libraries are.
   export STATIC_LIBS=-Wl,-rpath-link,$PREFIX/lib  
-# -lrt is required to link clock_gettime
+  # -lrt is required to link clock_gettime
   export LIBS="-lrt $LIBS"
 fi
 

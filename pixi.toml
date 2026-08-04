@@ -107,6 +107,12 @@ description = "Build plumed-feedstock with variant osx_arm64_mpinompi directly (
 [tasks."inspect-osx_arm64_mpinompi"]
 cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/osx_arm64_mpinompi.yaml"
 description = "List contents of plumed-feedstock packages built for variant osx_arm64_mpinompi"
+[tasks."build-osx_arm64_mpiopenmpi"]
+cmd = "rattler-build build --recipe recipe -m .ci_support/osx_arm64_mpiopenmpi.yaml"
+description = "Build plumed-feedstock with variant osx_arm64_mpiopenmpi directly (without setup scripts)"
+[tasks."inspect-osx_arm64_mpiopenmpi"]
+cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/osx_arm64_mpiopenmpi.yaml"
+description = "List contents of plumed-feedstock packages built for variant osx_arm64_mpiopenmpi"
 
 [feature.smithy.dependencies]
 conda-smithy = "*"
