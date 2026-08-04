@@ -23,9 +23,9 @@ liblapack:
 mpi:
 - mpich
 mpich:
-- '4'
+- '5'
 openmpi:
-- '4'
+- '5'
 target_platform:
 - linux-ppc64le
 zip_keys:

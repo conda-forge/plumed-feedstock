@@ -27,9 +27,9 @@ macos_machine:
 mpi:
 - nompi
 mpich:
-- '4'
+- '5'
 openmpi:
-- '4'
+- '5'
 target_platform:
 - osx-arm64
 zip_keys:
