@@ -2,7 +2,7 @@
 set -ex
 
 if [[ "${mpi}" != "nompi" ]]; then
-  if [[ "${target_platform}" != "osx-64" ]]; then
+  if [[ "${target_platform}" != "osx-arm64" ]]; then
     export CXX="$PREFIX/bin/mpicxx"
     export CC="$PREFIX/bin/mpicc"
   fi
