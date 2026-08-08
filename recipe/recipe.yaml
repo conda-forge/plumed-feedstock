@@ -15,7 +15,7 @@ source:
 
 build:
   # Prioritize nompi via build number
-  number: ${{ 2 + (100 if mpi == "nompi" else 0) }}
+  number: ${{ 3 + (100 if mpi == "nompi" else 0) }}
   skip:
     - win
   string: mpi_${{ mpi }}_h${{ hash }}_${{ build_number }}
@@ -24,12 +24,13 @@ requirements:
   build:
     - ${{ compiler("c") }}
     - ${{ compiler("cxx") }}
+    - ${{ stdlib("c") }}
     - make
   host:
     - if: mpi != "nompi"
       then: ${{ mpi }}
     - fftw
-    - gsl
+    - gsl >=2.8
     - libblas
     - libfabric
     - liblapack
