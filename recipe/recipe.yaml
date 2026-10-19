@@ -2,7 +2,7 @@ schema_version: 1
 
 context:
   name: "plumed"
-  version: "2.10.1"
+  version: "2.10.2"
   mpi_prefix: ${{ "nompi" if mpi == "nompi" else "mpi_" + mpi }}
 
 package:
@@ -11,7 +11,7 @@ package:
 
 source:
   url: https://github.com/${{ name }}/${{ name }}2/archive/v${{ version }}.tar.gz
-  sha256: 92e504371869091fe1ef1dd5a1f2996aa369ed9db6c7d2a56650231786ac7c5d
+  sha256: 74b3f35b62a338716efd3455aa488e292728b62a6cef71d9d3a9f41ff5a8733c
 
 build:
   # Prioritize nompi via build number
@@ -65,9 +65,7 @@ tests:
           - if: mpi != "nompi"
             then:
               - plumed config has mpi
-          - if: not (target_platform == "linux-ppc64le"
-                     or target_platform == "linux-aarch64"
-                     or target_platform == "osx-arm64")
+          - if: not (target_platform == "linux-ppc64le" or target_platform == "linux-aarch64" or target_platform == "osx-arm64")
             then:
               - plumed config has asmjit
           - $PREFIX/lib/plumed/plumed-runtime -h
