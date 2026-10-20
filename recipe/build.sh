@@ -13,7 +13,7 @@ if [[ $(uname) == "Linux" ]]; then
   # When using env modules the dependent libraries can be found through the
   # LD_LIBRARY_PATH or encoded configuring with -rpath.
   # Conda does not use LD_LIBRARY_PATH and it is thus necessary to suggest where libraries are.
-  export STATIC_LIBS=-Wl,-rpath-link,$PREFIX/lib  
+  export STATIC_LIBS="-Wl,-rpath-link,$PREFIX/lib -Wl,-rpath,$PREFIX/lib"
   # -lrt is required to link clock_gettime
   export LIBS="-lrt $LIBS"
 fi
