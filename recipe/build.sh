@@ -2,7 +2,15 @@
 set -ex
 
 if [[ "${mpi}" != "nompi" ]]; then
-  if [[ "${target_platform}" != "osx-arm64" ]]; then
+  # make the MPI wrappers call the conda compilers
+  export OMPI_CC="$CC" OMPI_CXX="$CXX"
+  export MPICH_CC="$CC" MPICH_CXX="$CXX"
+  if [[ "${build_platform}" != "${target_platform}" && "${mpi}" == "openmpi" ]]; then
+    # use the build-platform Open MPI wrappers but point them at the target prefix
+    export OPAL_PREFIX="$PREFIX"
+    export CXX="$BUILD_PREFIX/bin/mpicxx"
+    export CC="$BUILD_PREFIX/bin/mpicc"
+  else
     export CXX="$PREFIX/bin/mpicxx"
     export CC="$PREFIX/bin/mpicc"
   fi
@@ -32,6 +40,11 @@ export LIBS="-lfftw3 -lgsl -lgslcblas -llapack -lblas -lz $LIBS"
 # --disable-static-patch avoid tests that are only required for static patches
 # --disable-static-archive makes package smaller
 ./configure --prefix=$PREFIX --disable-python --disable-libsearch --disable-static-patch --disable-static-archive
+
+if [[ "${mpi}" != "nompi" ]]; then
+  # fail early if configure silently disabled MPI
+  grep -q -- "-D__PLUMED_HAS_MPI" Makefile.conf || { echo "ERROR: MPI not enabled"; exit 1; }
+fi
 
 make -j${CPU_COUNT}
 make install

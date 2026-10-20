@@ -27,6 +27,9 @@ requirements:
     - ${{ compiler("cxx") }}
     - ${{ stdlib("c") }}
     - make
+    # MPI compiler wrappers runnable on the build machine when cross-compiling
+    - if: build_platform != target_platform and mpi == "openmpi"
+      then: ${{ mpi }}
   host:
     - if: mpi != "nompi"
       then: ${{ mpi }}
