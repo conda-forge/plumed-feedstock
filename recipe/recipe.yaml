@@ -4,6 +4,8 @@ context:
   name: "plumed"
   version: "2.10.2"
   mpi_prefix: ${{ "nompi" if mpi == "nompi" else "mpi_" + mpi }}
+  # Prioritize nompi via build number
+  build_number: ${{ 0 + (100 if mpi == "nompi" else 0) }}
 
 package:
   name: ${{ name }}
@@ -14,11 +16,10 @@ source:
   sha256: 74b3f35b62a338716efd3455aa488e292728b62a6cef71d9d3a9f41ff5a8733c
 
 build:
-  # Prioritize nompi via build number
-  number: ${{ 3 + (100 if mpi == "nompi" else 0) }}
+  number: ${{ build_number }}
   skip:
     - win
-  string: mpi_${{ mpi }}_h${{ hash }}_${{ build_number }}
+  string: ${{ mpi_prefix }}_h${{ hash }}_${{ build_number }}
 
 requirements:
   build:
@@ -32,7 +33,6 @@ requirements:
     - fftw
     - gsl >=2.8
     - libblas
-    - libfabric
     - liblapack
     - "libopenblas * *openmp*"
     - zlib
